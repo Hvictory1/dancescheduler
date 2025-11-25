@@ -31,6 +31,10 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
+      /* iOS Safe Area Utility */
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom);
+      }
       /* Animation Utilities */
       @keyframes fadeIn {
         from { opacity: 0; }

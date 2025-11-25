@@ -22,7 +22,8 @@ export const calculateWeeklyStats = (classes: ClassSession[], studios: Studio[])
     if (studio) {
       const duration = calculateDuration(cls.startTime, cls.endTime);
       totalHours += duration;
-      totalIncome += duration * studio.rate;
+      // Change: Income is now flat rate per session, not per hour
+      totalIncome += studio.rate;
     }
   });
 
@@ -34,7 +35,7 @@ export const calculateWeeklyStats = (classes: ClassSession[], studios: Studio[])
 };
 
 export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'CNY' }).format(amount);
+  return new Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'CNY', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
 };
 
 // Date Helpers

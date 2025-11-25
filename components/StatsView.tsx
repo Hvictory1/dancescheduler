@@ -86,28 +86,44 @@ export const StatsView: React.FC<StatsViewProps> = ({
     }
   };
 
-  // History generator (Last 5 weeks)
+  // History generator logic:
+  // Default show past 5 weeks + any other weeks with adjustments
   const historyWeeks = useMemo(() => {
-    const weeks = [];
-    let d = getStartOfWeek(new Date());
-    // Show current week + previous 4 weeks
+    const todayStart = getStartOfWeek(new Date());
+    const todayWeekKey = formatDateKey(todayStart);
+    
+    // Initialize Set with keys for the last 5 weeks
+    const keys = new Set<string>();
     for (let i = 0; i < 5; i++) {
-      const key = formatDateKey(d);
+      keys.add(formatDateKey(addDays(todayStart, -7 * i)));
+    }
+
+    // Add any weeks that have adjustments (even if older than 5 weeks)
+    adjustments.forEach(a => keys.add(a.weekStartDate));
+    
+    // Also include the currently VIEWED week if it's not in the list
+    keys.add(currentWeekKey);
+
+    // Convert to array and sort descending (newest first)
+    const sortedKeys = Array.from(keys).sort((a, b) => b.localeCompare(a));
+
+    return sortedKeys.map(key => {
+      const date = new Date(key);
       const adjs = adjustments.filter(a => a.weekStartDate === key);
       const adjTotal = adjs.reduce((sum, item) => sum + item.amount, 0);
-      weeks.push({
-        date: d,
+      
+      return {
+        date: date,
         key: key,
         total: baseStats.totalIncome + adjTotal,
-        hasAdjustments: adjs.length > 0
-      });
-      d = addDays(d, -7);
-    }
-    return weeks;
-  }, [adjustments, baseStats.totalIncome]);
+        hasAdjustments: adjs.length > 0,
+        isCurrentWeek: key === todayWeekKey
+      };
+    });
+  }, [adjustments, baseStats.totalIncome, currentWeekKey]);
 
   return (
-    <div className="space-y-6 pb-24 animate-fade-in">
+    <div className="h-full overflow-y-auto space-y-6 pb-24 animate-fade-in no-scrollbar">
       
       {/* Date Navigation */}
       <div className="flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
@@ -177,13 +193,14 @@ export const StatsView: React.FC<StatsViewProps> = ({
                 加课/补贴
               </button>
             </div>
-            <div className="flex gap-2 mb-3">
+            {/* 垂直排列输入框以防止溢出 */}
+            <div className="flex flex-col gap-3 mb-3">
                <input 
                  type="number" 
-                 placeholder="金额" 
+                 placeholder="金额 (元)" 
                  value={adjAmount}
                  onChange={e => setAdjAmount(e.target.value)}
-                 className="flex-1 p-3 bg-gray-50 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-rose-500"
+                 className="w-full p-3 bg-gray-50 rounded-xl text-base font-bold outline-none focus:ring-2 focus:ring-rose-500"
                  autoFocus
                />
                <input 
@@ -191,7 +208,7 @@ export const StatsView: React.FC<StatsViewProps> = ({
                  placeholder="备注 (如: 节假日停课)" 
                  value={adjNote}
                  onChange={e => setAdjNote(e.target.value)}
-                 className="flex-[2] p-3 bg-gray-50 rounded-xl text-sm outline-none focus:ring-2 focus:ring-rose-500"
+                 className="w-full p-3 bg-gray-50 rounded-xl text-base outline-none focus:ring-2 focus:ring-rose-500"
                />
             </div>
             <button type="submit" className="w-full py-3 bg-gray-900 text-white rounded-xl font-bold text-sm">确认记录</button>
@@ -207,16 +224,16 @@ export const StatsView: React.FC<StatsViewProps> = ({
           <div className="space-y-2">
             {currentWeekAdjustments.map(adj => (
               <div key={adj.id} className="flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-full ${adj.amount >= 0 ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}`}>
+                <div className="flex items-center gap-3 overflow-hidden">
+                  <div className={`flex-shrink-0 p-2 rounded-full ${adj.amount >= 0 ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}`}>
                     {adj.amount >= 0 ? <Icons.Plus size={16} /> : <Icons.Trash size={16} />}
                   </div>
-                  <div>
-                    <p className="text-sm font-bold text-gray-700">{adj.note}</p>
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-gray-700 truncate">{adj.note}</p>
                     <p className="text-xs text-gray-400">手动调整</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-shrink-0 ml-2">
                    <span className={`font-bold ${adj.amount >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
                      {adj.amount > 0 ? '+' : ''}{adj.amount}
                    </span>
@@ -232,7 +249,7 @@ export const StatsView: React.FC<StatsViewProps> = ({
 
       {/* History List */}
       <div className="pt-6 border-t border-gray-200">
-        <h3 className="font-bold text-gray-800 text-sm mb-4 px-2">近期周收入记录</h3>
+        <h3 className="font-bold text-gray-800 text-sm mb-4 px-2">历史周收入</h3>
         <div className="space-y-2">
           {historyWeeks.map((week, idx) => (
             <button 
@@ -247,7 +264,7 @@ export const StatsView: React.FC<StatsViewProps> = ({
               <div className="text-left">
                 <p className={`font-bold text-sm ${week.key === currentWeekKey ? 'text-white' : 'text-gray-800'}`}>
                   {formatWeekRange(week.date)}
-                  {idx === 0 && <span className="ml-2 text-[10px] bg-rose-500 text-white px-2 py-0.5 rounded-full">本周</span>}
+                  {week.isCurrentWeek && <span className="ml-2 text-[10px] bg-rose-500 text-white px-2 py-0.5 rounded-full">本周</span>}
                 </p>
                 <p className={`text-xs ${week.key === currentWeekKey ? 'text-gray-400' : 'text-gray-400'}`}>
                   {week.hasAdjustments ? '有手动调整' : '标准课表'}

@@ -74,7 +74,8 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ classes, studios, on
           daysClasses.map(cls => {
             const studio = getStudio(cls.studioId);
             const duration = calculateDuration(cls.startTime, cls.endTime);
-            const income = duration * (studio?.rate || 0);
+            // Updated: Income is now flat rate per session, not hourly
+            const income = studio?.rate || 0;
 
             return (
               <div 

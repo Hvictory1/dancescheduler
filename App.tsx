@@ -93,11 +93,11 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex justify-center">
-      {/* max-w-md ensures it looks like a phone on desktop, w-full ensures it fits mobile */}
-      <div className="w-full max-w-md bg-[#f8fafc] min-h-screen relative shadow-2xl flex flex-col pb-safe">
+      {/* Use h-[100dvh] to fix mobile browser address bar layout shifts */}
+      <div className="w-full max-w-md bg-[#f8fafc] h-[100dvh] relative shadow-2xl flex flex-col">
         
         {/* Header */}
-        <header className="px-6 pt-12 pb-4 flex justify-between items-center bg-white sticky top-0 z-10 border-b border-gray-100 select-none">
+        <header className="px-6 pt-12 pb-4 flex justify-between items-center bg-white sticky top-0 z-10 border-b border-gray-100 select-none flex-shrink-0">
           <div>
             <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
               {activeTab === 'schedule' && '我的课表'}
@@ -125,8 +125,8 @@ const App: React.FC = () => {
           </div>
         </header>
 
-        {/* Content */}
-        <main className="flex-1 p-4 overflow-hidden">
+        {/* Content - Main area allows scroll */}
+        <main className="flex-1 p-4 overflow-hidden relative">
           {activeTab === 'schedule' && (
             <ScheduleView 
               classes={classes} 
@@ -148,7 +148,7 @@ const App: React.FC = () => {
         </main>
 
         {/* Bottom Navigation */}
-        <nav className="fixed bottom-0 w-full max-w-md bg-white border-t border-gray-100 flex justify-around py-3 pb-6 z-40 text-[10px] font-bold text-gray-400 select-none">
+        <nav className="w-full bg-white border-t border-gray-100 flex justify-around py-3 pb-6 pb-safe z-40 text-[10px] font-bold text-gray-400 select-none flex-shrink-0">
           <button 
             onClick={() => setActiveTab('schedule')}
             className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'schedule' ? 'text-rose-500' : 'hover:text-gray-600'}`}

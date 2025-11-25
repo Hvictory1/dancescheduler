@@ -94,7 +94,7 @@ export const ClassEditor: React.FC<ClassEditorProps> = ({
         >
           {studios.length === 0 && <option value="">请先在管理中添加舞蹈室</option>}
           {studios.map(s => (
-            <option key={s.id} value={s.id}>{s.name} ({s.rate}元/时)</option>
+            <option key={s.id} value={s.id}>{s.name} ({s.rate}元/节)</option>
           ))}
         </select>
       </div>
@@ -144,7 +144,7 @@ export const ClassEditor: React.FC<ClassEditorProps> = ({
           value={notes} 
           onChange={(e) => setNotes(e.target.value)}
           placeholder="例如：需带音响..."
-          className="w-full p-4 rounded-2xl border border-rose-100 bg-rose-50 text-rose-600 placeholder-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-500"
+          className="w-full p-4 rounded-2xl border border-rose-100 bg-rose-50 text-rose-600 placeholder-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-500 text-base"
         />
       </div>
 

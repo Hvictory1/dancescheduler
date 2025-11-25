@@ -50,7 +50,7 @@ export const StudioManager: React.FC<StudioManagerProps> = ({ studios, setStudio
           <div key={studio.id} className={`flex justify-between items-center p-4 rounded-2xl border ${studio.color} bg-opacity-30`}>
             <div>
               <h3 className="font-bold text-gray-800">{studio.name}</h3>
-              <p className="text-sm opacity-80">{formatCurrency(studio.rate)} / 小时</p>
+              <p className="text-sm opacity-80">{formatCurrency(studio.rate)} / 节</p>
             </div>
             <button 
               onClick={() => handleDelete(studio.id)}
@@ -71,14 +71,14 @@ export const StudioManager: React.FC<StudioManagerProps> = ({ studios, setStudio
                 placeholder="舞蹈室名称 (如: 星空舞蹈)" 
                 value={newStudioName}
                 onChange={(e) => setNewStudioName(e.target.value)}
-                className="w-full p-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full p-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-rose-500 text-base"
               />
               <input 
                 type="number" 
-                placeholder="时薪 (元)" 
+                placeholder="单节课费 (元)" 
                 value={newStudioRate}
                 onChange={(e) => setNewStudioRate(e.target.value)}
-                className="w-full p-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full p-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-rose-500 text-base"
               />
               <div className="flex gap-2">
                 <button onClick={() => setIsAdding(false)} className="flex-1 py-2 text-gray-500 font-medium">取消</button>

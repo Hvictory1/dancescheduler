@@ -115,7 +115,7 @@ export const ClassEditor: React.FC<ClassEditorProps> = ({
 
       {/* 时间选择 - 分离式 */}
       <div className="flex gap-4">
-        <div className="flex-1">
+        <div>
            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">开始时间</label>
            <input 
             type="time" 
@@ -125,7 +125,7 @@ export const ClassEditor: React.FC<ClassEditorProps> = ({
            />
         </div>
         
-        <div className="flex-1">
+        <div>
            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">结束时间</label>
            <input 
             type="time" 

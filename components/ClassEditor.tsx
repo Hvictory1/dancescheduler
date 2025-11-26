@@ -121,7 +121,7 @@ export const ClassEditor: React.FC<ClassEditorProps> = ({
             type="time" 
             value={startTime} 
             onChange={(e) => setStartTime(e.target.value)}
-            className="w-full p-4 text-center text-xl font-bold rounded-2xl border-2 border-gray-200 bg-white focus:outline-none focus:border-rose-500"
+            className="w-full p-2 text-center text-xl font-bold rounded-2xl border-2 border-gray-200 bg-white focus:outline-none focus:border-rose-500"
            />
         </div>
         
@@ -131,7 +131,7 @@ export const ClassEditor: React.FC<ClassEditorProps> = ({
             type="time" 
             value={endTime} 
             onChange={(e) => setEndTime(e.target.value)}
-            className="w-full p-4 text-center text-xl font-bold rounded-2xl border-2 border-gray-200 bg-white focus:outline-none focus:border-rose-500"
+            className="w-full p-2 text-center text-xl font-bold rounded-2xl border-2 border-gray-200 bg-white focus:outline-none focus:border-rose-500"
            />
         </div>
       </div>

@@ -100,7 +100,7 @@ const App: React.FC = () => {
         <header className="px-6 pt-12 pb-4 flex justify-between items-center bg-white sticky top-0 z-10 border-b border-gray-100 select-none flex-shrink-0">
           <div>
             <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
-              {activeTab === 'schedule' && '我的课表11'}
+              {activeTab === 'schedule' && '我的课表'}
               {activeTab === 'stats' && '收入统计'}
             </h1>
             <p className="text-xs text-gray-400 font-medium">Dance Teacher Assistant</p>
